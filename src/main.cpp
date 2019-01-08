@@ -26,23 +26,19 @@ using std::endl;
 int counter(std::vector<std::vector<int>> v, int y, int x)
 {
   int count = 0;
-  int dx[] = {1, 1, 1, 0, 0, -1, -1, -1};
-  int dy[] = {1, 0, -1, 1, -1, 1, 0, -1};
-  for (int i = 0; i < 8; i++) {
-    if(v[y+dy[i]][x+dx[i]] == 1) count++;
-    // cout << y+dy[i] << " : " << x+dx[i] << " : " << v[y+dy[i]][x+dx[i]] << endl;
+  for(int dx = -1; dx <= 1; dx++){
+    for(int dy = -1; dy <= 1; dy++){
+      if(v[y+dy][x+dx] == 1) count++;
+    }
   }
-  // cout << x << " : " << y << " : " << count << endl;
-  // cout << count << endl;
-  // cout << "=======" << endl;
-  return count;
+
+  return count - v[y][x];
 }
 
 // 生死判定を行う
 int live_check(std::vector<std::vector<int>> v, int y, int x)
 {
   int count = counter(v, y, x);
-  // cout << count << endl;
   if(v[y][x] == 0){
     if(count == 3) return 1;
     else return 0;
@@ -60,16 +56,10 @@ std::vector<std::vector<int>> reload_map(std::vector<std::vector<int>> v)
   for (int i = 1; i < n+1; i++) {
     for (int j = 1; j < n+1; j++) {
       tmp[i][j] = live_check(v, i, j);
-      // cout << live_check(v, i, j) << endl;
-    }
-  }
-  for (int i = 0; i < n+1; i++) {
-    for (int j = 0; j < n+1; j++) {
-      v[j][i] = tmp[j][i];
     }
   }
 
-  return v;
+  return tmp;
 }
 
 int main()
