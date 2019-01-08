@@ -20,22 +20,56 @@ void view(std::vector<std::vector<int>> v)
   std::cout << std::endl;
 }
 
+using std::cout;
+using std::endl;
 // セルの数を数え上げる
-int count(std::vector<std::vector<int>> v, int x, int y)
+int counter(std::vector<std::vector<int>> v, int y, int x)
 {
-  return 3;
+  int count = 0;
+  int dx[] = {1, 1, 1, 0, 0, -1, -1, -1};
+  int dy[] = {1, 0, -1, 1, -1, 1, 0, -1};
+  for (int i = 0; i < 8; i++) {
+    if(v[y+dy[i]][x+dx[i]] == 1) count++;
+    // cout << y+dy[i] << " : " << x+dx[i] << " : " << v[y+dy[i]][x+dx[i]] << endl;
+  }
+  // cout << x << " : " << y << " : " << count << endl;
+  // cout << count << endl;
+  // cout << "=======" << endl;
+  return count;
 }
 
 // 生死判定を行う
-int live_check(std::vector<std::vector<int>> v, int x, int y)
+int live_check(std::vector<std::vector<int>> v, int y, int x)
 {
-  return 1;
+  int count = counter(v, y, x);
+  // cout << count << endl;
+  if(v[y][x] == 0){
+    if(count == 3) return 1;
+    else return 0;
+  }else{
+    if(count == 2 || count == 3) return 1;
+    else return 0;
+  }
 }
 
 // mapを書きかえる
 std::vector<std::vector<int>> reload_map(std::vector<std::vector<int>> v)
 {
-  return vector v;
+  using std::vector;
+  vector<vector<int>> tmp(12, vector<int>(12, 0));
+  for (int i = 1; i < n+1; i++) {
+    for (int j = 1; j < n+1; j++) {
+      tmp[i][j] = live_check(v, i, j);
+      // cout << live_check(v, i, j) << endl;
+    }
+  }
+  for (int i = 0; i < n+1; i++) {
+    for (int j = 0; j < n+1; j++) {
+      v[j][i] = tmp[j][i];
+    }
+  }
+
+  return v;
 }
 
 int main()
